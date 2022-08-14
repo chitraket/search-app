@@ -1,24 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { setUserAddress } from './api';
+import Home from './pages/Home';
+import UserDetail from './pages/UserDetail';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  const [data,setData] = useState([]);
+  useEffect(()=> {
+    async function getStatus() {
+      const res = await setUserAddress()
+      setData(res.results)
+  };
+  getStatus()
+  },[])
+  return ( 
+    <Routes>
+      <Route  path="/"  element={<Home data={data}/>} />
+      <Route path="/contact/:id" element={<UserDetail data={data}/>} />
+  </Routes>
   );
 }
 
